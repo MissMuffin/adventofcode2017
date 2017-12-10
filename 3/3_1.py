@@ -23,27 +23,30 @@
 
 
 inp = 325489
-inp = 1024
+# inp = 1024
 
-# (571, 326041)
+spiral = dict()
+pos = (0,0)
+spiral[1] = pos
+steps = 1
+turns = 0
 
-# not working properly: 1024 wrong steps
+while steps <= inp:
+    length = (turns // 2) + 1
+    for _ in xrange(length):
+        direction = turns % 4
+        if direction == 0:
+            pos = (pos[0] + 1, pos[1])
+        elif direction == 1:
+            pos = (pos[0], pos[1] + 1)
+        elif direction == 2:
+            pos = (pos[0] - 1, pos[1])
+        else:
+            pos = (pos[0], pos[1] - 1)
+        steps += 1
+        spiral[steps] = pos
+    turns += 1
 
-width = 1
-corner = 1
-
-while True:
-    width += 2
-    corner = width * width
-    if corner >= inp:
-        if abs(corner - inp) > width:
-            width -= 2
-            corner = width * width
-        break
-
-spiral_steps = width - abs(corner - inp)
-
-# manhattan distance
-steps =  width - spiral_steps
-
-print(steps)
+result_pos = spiral[inp]
+dist = abs(result_pos[0]) + abs(result_pos[1])
+print(dist)

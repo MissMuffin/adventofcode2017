@@ -19,3 +19,41 @@
 # 362  747  806--->   ...
 
 # What is the first value written that is larger than your puzzle input?
+
+from collections import defaultdict
+
+def get_neighbours(pos):
+    for x in range(pos[0] - 1, pos[0] + 2):
+        for y in range(pos[1] - 1, pos[1] + 2):
+            if (x, y) != pos:
+                yield x, y
+
+inp = 325489
+# inp = 1024
+
+sum_spiral = defaultdict(int)
+pos = (0,0)
+sum_spiral[pos] = 1
+turns = 0
+run = True
+
+while run:
+    length = (turns // 2) + 1
+    for _ in xrange(length):
+        direction = turns % 4
+        if direction == 0:
+            pos = (pos[0] + 1, pos[1])
+        elif direction == 1:
+            pos = (pos[0], pos[1] + 1)
+        elif direction == 2:
+            pos = (pos[0] - 1, pos[1])
+        else:
+            pos = (pos[0], pos[1] - 1)
+
+        test = sum(sum_spiral[n] for n in get_neighbours(pos))
+        if test > inp:
+            print(test)
+            run = False
+            break
+        sum_spiral[pos] = test
+    turns += 1
